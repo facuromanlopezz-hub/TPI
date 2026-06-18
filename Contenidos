@@ -1,0 +1,263 @@
+Contenidos de "Funciones.cpp"
+#include <iostream>
+#include "funciones.h"
+#include <string>
+
+using namespace std;
+
+void mostrarTituloMenu()
+{
+    cout << " ________________________________________"  << endl;
+    cout << "|                                        |" << endl;
+    cout << "|     PROGRAMACIÓN 1 - Turno Mañana      |" << endl;
+    cout << "|       Comisión: 7 - Presencial         |" << endl;
+    cout << "|                                        |" << endl;
+    cout << "|      TRABAJO PRÁCTICO INTEGRADOR       |" << endl;
+    cout << "|            Tony Industries             |" << endl;
+    cout << "|________________________________________|" << endl;
+    system("pause");
+}
+
+/// MENÚ PRINCIPAL
+void menuPrincipal()
+{
+    int opcion;
+
+    do
+    {
+        mostrarMenu();
+
+        cout << "       Opción: ";
+        cin >> opcion;
+
+        ejecutarOpcion(opcion);
+
+        system("pause");
+
+    }
+    while(opcion != 0);
+}
+
+/// LISTADO OPCIONES MENÚ PRINCIPAL
+void mostrarMenu()
+{
+    system("cls");
+
+    cout << " -----------------------------------------" << endl;
+    cout << "|         MENÚ PRINCIPAL                  |" << endl;
+    cout << " -----------------------------------------" << endl;
+    cout << "|    1. Cargar Lote de Marcas             |" << endl;
+    cout << "|    2. Cargar Lote de Productos          |" << endl;
+    cout << "|    3. Cargar Lote de Formas de Pago     |" << endl;
+    cout << "|    4. Cargar Lote de Ventas             |" << endl;
+    cout << "|    5. Mostrar Reportes                  |" << endl;
+    cout << "|   22. Integrantes del Equipo            |" << endl;
+    cout << " -----------------------------------------" << endl;
+    cout << "|    0. SALIR DEL PROGRAMA                |" << endl;
+    cout << " -----------------------------------------" << endl;
+}
+
+/// EJECUTAR OPCIÓN DEL MENÚ PRINCIPAL
+void ejecutarOpcion(int opcion)
+{
+    switch(opcion)
+    {
+    case 1:
+        system("cls");
+        cargarMarcas();
+        break;
+    case 2:
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de ingresar los Productos..." << endl;
+        break;
+    case 3:
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de ingresar las Formas de Pago..." << endl;
+        break;
+    case 4:
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de ingresar las Ventas..." << endl;
+        break;
+    case 5:
+        system("cls");
+        menuReportes();
+        break;
+    case 22:
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de mostrar los Créditos del Sistema..." << endl;
+        break;
+    case 0:
+        cout << "Good Bye. Lord Vader!" << endl;
+        break;
+    default:
+        cout << "Opción ingresada no es válida." << endl;
+    }
+}
+
+/// MENÚ REPORTES
+void menuReportes()
+{
+    char opcion;
+
+    do
+    {
+        mostrarMenuReportes();
+
+        cout << "       Opción: ";
+        cin >> opcion;
+
+        ejecutarOpcion(opcion);
+
+        system("pause");
+
+    }
+    while(opcion != 'X');
+}
+
+/// LISTADO OPCIONES MENÚ REPORTES
+void mostrarMenuReportes()
+{
+    system("cls");
+
+    cout << " -----------------------------------------" << endl;
+    cout << "|         MENÚ REPORTES                   |" << endl;
+    cout << " -----------------------------------------" << endl;
+    cout << "|    a. Recaudación por Producto          |" << endl;
+    cout << "|    b. Porcentajes de Ventas por FP      |" << endl;
+    cout << "|    c. Ventas por Marca y Forma de Pago  |" << endl;
+    cout << "|    d. Productos sin Ventas              |" << endl;
+    cout << "|    e. Top 10 Clientes + Sorteo          |" << endl;
+    cout << " -----------------------------------------" << endl;
+    cout << "|    X. Volver al Menú Principal          |" << endl;
+    cout << " -----------------------------------------" << endl;
+}
+
+/// EJECUTAR OPCIÓN DEL MENÚ REPORTES
+void ejecutarOpcion(char opcion)
+{
+    // ¿Qué pasa si me ingresan el valor en miníscula?
+      // Revisar que solo debe haber Case con los valores en Mayúscula...
+
+    switch(opcion)
+    {
+    case 'A':
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de mostrar REPORTE 1..." << endl;
+        break;
+    case 'B':
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de mostrar REPORTE 2..." << endl;
+        break;
+    case 'C':
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de mostrar REPORTE 3..." << endl;
+        break;
+    case 'D':
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de mostrar REPORTE 4..." << endl;
+        break;
+    case 'E':
+        system("cls");
+        cout << "Acá hay que llamar a la Función encargada de mostrar REPORTE 5..." << endl;
+        break;
+    case 'X':
+        cout << "Go back!" << endl;
+
+        break;
+    default:
+        cout << "Opción ingresada no es válida." << endl;
+    }
+}
+
+///Lote 1
+void cargarMarcas()
+{
+    const int TAM = 10;
+
+    int vCodigoMarca[TAM];
+    string vNombreMarca[TAM];
+
+    for(int i = 0; i < TAM; i++)
+    {
+        cout << endl;
+        cout << "Marca " << i + 1 << endl;
+
+        vCodigoMarca[i] = pedirCodigoMarca();
+
+        cout << "Ingrese nombre de la marca: ";
+        cin >> vNombreMarca[i];
+    }
+    cout << endl;
+cout << "Marcas Cargadas hasta a hora" << endl;
+
+for(int i = 0; i < TAM; i++)
+{
+    cout << vCodigoMarca[i]
+         << " - "
+         << vNombreMarca[i]
+         << endl;
+}
+}
+int pedirCodigoMarca()
+{
+    int codigo;
+
+    cout << "Ingrese codigo de marca (1 a 10):  ";
+    cin >> codigo;
+
+    while(codigo < 1 || codigo > 10)
+    {
+        cout << "Error Codigo invalido." << endl;
+        cout << "Ingrese el codigo otra vez: ";
+        cin >> codigo;
+    }
+
+    return codigo;
+}
+
+
+
+
+
+
+Contenidos de "Main.cpp"
+#include <iostream>
+#include "funciones.h"
+
+using namespace std;
+
+int main()
+{
+    setlocale(LC_ALL, "spanish");
+
+    mostrarTituloMenu();
+    menuPrincipal();
+
+    return 0;
+}
+
+
+
+Contenidos de "funciones.h"
+
+#ifndef FUNCIONES_H_INCLUDED
+#define FUNCIONES_H_INCLUDED
+
+void mostrarTituloMenu();
+
+/// MENÚ PRINCIPAL
+void menuPrincipal();
+void mostrarMenu();
+void ejecutarOpcion(int opcion);
+
+/// MENÚ REPORTES
+void menuReportes();
+void mostrarMenuReportes();
+void ejecutarOpcion(char opcion);
+
+
+///  Lote 1
+int pedirCodigoMarca();
+void cargarMarcas();
+int buscarMarca(int vCodigoMarca[], int cantidad, int codigo);
+#endif // FUNCIONES_H_INCLUDED
