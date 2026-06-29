@@ -19,7 +19,19 @@ void mostrarTituloMenu()
 }
 
 /// MENÚ PRINCIPAL
-void menuPrincipal()
+void menuPrincipal(
+    int vCodigoMarca[],
+    string vNombreMarca[],
+    int vCodigoProducto[],
+    string vNombreProducto[],
+    float vPrecioVenta[],
+    float vPrecioCompra[],
+    int vStock[],
+    int vCodigoMarcaProducto[],
+    string vCodigoFP[],
+    string vNombreFP[],
+    int vPorcentajeFP[]
+)
 {
     int opcion;
 
@@ -30,7 +42,20 @@ void menuPrincipal()
         cout << "       Opción: ";
         cin >> opcion;
 
-        ejecutarOpcion(opcion);
+     ejecutarOpcion(
+    opcion,
+    vCodigoMarca,
+    vNombreMarca,
+    vCodigoProducto,
+    vNombreProducto,
+    vPrecioVenta,
+    vPrecioCompra,
+    vStock,
+    vCodigoMarcaProducto,
+    vCodigoFP,
+    vNombreFP,
+    vPorcentajeFP
+);
 
         system("pause");
 
@@ -38,7 +63,7 @@ void menuPrincipal()
     while(opcion != 0);
 }
 
-/// LISTADO OPCIONES MENÚ PRINCIPAL
+
 void mostrarMenu()
 {
     system("cls");
@@ -57,23 +82,54 @@ void mostrarMenu()
     cout << " -----------------------------------------" << endl;
 }
 
-/// EJECUTAR OPCIÓN DEL MENÚ PRINCIPAL
-void ejecutarOpcion(int opcion)
+
+void ejecutarOpcion(
+    int opcion,
+    int vCodigoMarca[],
+    string vNombreMarca[],
+    int vCodigoProducto[],
+    string vNombreProducto[],
+    float vPrecioVenta[],
+    float vPrecioCompra[],
+    int vStock[],
+    int vCodigoMarcaProducto[],
+    string vCodigoFP[],
+    string vNombreFP[],
+    int vPorcentajeFP[]
+)
 {
     switch(opcion)
     {
     case 1:
         system("cls");
-        cargarMarcas();
+        cargarMarcas(vCodigoMarca,
+                     vNombreMarca);
         break;
     case 2:
         system("cls");
-        cout << "Acá hay que llamar a la Función encargada de ingresar los Productos..." << endl;
+
+        cargarProductos(
+            vCodigoProducto,
+            vNombreProducto,
+            vPrecioVenta,
+            vPrecioCompra,
+            vStock,
+            vCodigoMarcaProducto,
+            vCodigoMarca,
+            vNombreMarca
+        );
+
         break;
     case 3:
-        system("cls");
-        cout << "Acá hay que llamar a la Función encargada de ingresar las Formas de Pago..." << endl;
-        break;
+    system("cls");
+
+    cargarFormasPago(
+        vCodigoFP,
+        vNombreFP,
+        vPorcentajeFP
+    );
+
+    break;
     case 4:
         system("cls");
         cout << "Acá hay que llamar a la Función encargada de ingresar las Ventas..." << endl;
@@ -94,7 +150,7 @@ void ejecutarOpcion(int opcion)
     }
 }
 
-/// MENÚ REPORTES
+
 void menuReportes()
 {
     char opcion;
@@ -114,7 +170,7 @@ void menuReportes()
     while(opcion != 'X');
 }
 
-/// LISTADO OPCIONES MENÚ REPORTES
+
 void mostrarMenuReportes()
 {
     system("cls");
@@ -132,11 +188,11 @@ void mostrarMenuReportes()
     cout << " -----------------------------------------" << endl;
 }
 
-/// EJECUTAR OPCIÓN DEL MENÚ REPORTES
+
 void ejecutarOpcion(char opcion)
 {
     // ¿Qué pasa si me ingresan el valor en miníscula?
-      // Revisar que solo debe haber Case con los valores en Mayúscula...
+    // Revisar que solo debe haber Case con los valores en Mayúscula...
 
     switch(opcion)
     {
@@ -170,12 +226,11 @@ void ejecutarOpcion(char opcion)
 }
 
 ///Lote 1
-void cargarMarcas()
+void cargarMarcas(int vCodigoMarca[],
+                  string vNombreMarca[])
 {
     const int TAM = 10;
 
-    int vCodigoMarca[TAM];
-    string vNombreMarca[TAM];
 
     for(int i = 0; i < TAM; i++)
     {
@@ -184,20 +239,38 @@ void cargarMarcas()
 
         vCodigoMarca[i] = pedirCodigoMarca();
 
+        while(buscarMarca(vCodigoMarca, i, vCodigoMarca[i]) != -1)
+        {
+            cout << "Error. Codigo repetido." << endl;
+
+            vCodigoMarca[i] = pedirCodigoMarca();
+        }
+
+        cin.ignore();
+
         cout << "Ingrese nombre de la marca: ";
-        cin >> vNombreMarca[i];
+        getline(cin, vNombreMarca[i]);
+
+        while(vNombreMarca[i] == "")
+        {
+            cout << "Error. Debe ingresar un nombre." << endl;
+            cout << "Ingrese nuevamente: ";
+            getline(cin, vNombreMarca[i]);
+        }
     }
     cout << endl;
-cout << "Marcas Cargadas hasta a hora" << endl;
+    cout << "Marcas cargadas:" << endl;
 
-for(int i = 0; i < TAM; i++)
-{
-    cout << vCodigoMarca[i]
-         << " - "
-         << vNombreMarca[i]
-         << endl;
+    for(int i = 0; i < TAM; i++)
+    {
+        cout << vCodigoMarca[i]
+             << " - "
+             << vNombreMarca[i]
+             << endl;
+    }
 }
-}
+
+
 int pedirCodigoMarca()
 {
     int codigo;
@@ -213,7 +286,315 @@ int pedirCodigoMarca()
     }
 
     return codigo;
+
 }
+
+int pedirCodigoProducto()
+{
+    int codigo;
+
+    cout << "Ingrese codigo de producto: ";
+    cin >> codigo;
+
+    while(codigo < 100 || codigo > 999)
+    {
+        cout << "Error. Debe tener 3 digitos." << endl;
+        cout << "Ingrese nuevamente: ";
+        cin >> codigo;
+    }
+
+    return codigo;
+}
+
+int buscarMarca(int vCodigoMarca[], int cantidad, int codigo)
+{
+    for(int i = 0; i < cantidad; i++)
+    {
+        if(vCodigoMarca[i] == codigo)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+int buscarProducto(int vCodigoProducto[], int cantidad, int codigo)
+{
+    for(int i = 0; i < cantidad; i++)
+    {
+        if(vCodigoProducto[i] == codigo)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
+void cargarProductos(
+    int vCodigoProducto[],
+    string vNombreProducto[],
+    float vPrecioVenta[],
+    float vPrecioCompra[],
+    int vStock[],
+    int vCodigoMarcaProducto[],
+    int vCodigoMarca[],
+    string vNombreMarca[]
+)
+{
+    const int TAM_PRODUCTOS = 20;
+    const int TAM_MARCAS = 10;
+
+    if(vCodigoMarca[0] == 0)
+    {
+        cout << "Error. Primero debe cargar el lote de marcas." << endl;
+
+        limpiarProductos(
+            vCodigoProducto,
+            vNombreProducto,
+            vPrecioVenta,
+            vPrecioCompra,
+            vStock,
+            vCodigoMarcaProducto
+        );
+
+        return;
+    }
+
+    for(int i = 0; i < TAM_PRODUCTOS; i++)
+    {
+        cout << endl;
+        cout << "Producto " << i + 1 << endl;
+
+        /// Código de producto
+        vCodigoProducto[i] = pedirCodigoProducto();
+
+        if(buscarProducto(vCodigoProducto, i, vCodigoProducto[i]) != -1)
+        {
+            cout << "Error. Codigo de producto repetido." << endl;
+
+            limpiarProductos(
+                vCodigoProducto,
+                vNombreProducto,
+                vPrecioVenta,
+                vPrecioCompra,
+                vStock,
+                vCodigoMarcaProducto
+            );
+
+            return;
+        }
+
+        /// Nombre
+        cin.ignore();
+
+        cout << "Ingrese nombre del producto: ";
+        getline(cin, vNombreProducto[i]);
+
+        if(vNombreProducto[i] == "")
+        {
+            cout << "Error. Debe ingresar un nombre." << endl;
+
+            limpiarProductos(
+                vCodigoProducto,
+                vNombreProducto,
+                vPrecioVenta,
+                vPrecioCompra,
+                vStock,
+                vCodigoMarcaProducto
+            );
+
+            return;
+        }
+
+        /// Precio de venta
+        cout << "Ingrese precio de venta: ";
+        cin >> vPrecioVenta[i];
+
+        if(vPrecioVenta[i] == 0)
+        {
+            cout << "Error. El precio no puede ser 0." << endl;
+
+            limpiarProductos(
+                vCodigoProducto,
+                vNombreProducto,
+                vPrecioVenta,
+                vPrecioCompra,
+                vStock,
+                vCodigoMarcaProducto
+            );
+
+            return;
+        }
+
+        /// Precio de compra
+        cout << "Ingrese precio de compra: ";
+        cin >> vPrecioCompra[i];
+
+        if(vPrecioCompra[i] == 0)
+        {
+            cout << "Error. El precio no puede ser 0." << endl;
+
+            limpiarProductos(
+                vCodigoProducto,
+                vNombreProducto,
+                vPrecioVenta,
+                vPrecioCompra,
+                vStock,
+                vCodigoMarcaProducto
+            );
+
+            return;
+        }
+
+        /// Stock
+        cout << "Ingrese stock: ";
+        cin >> vStock[i];
+
+        if(vStock[i] == 0)
+        {
+            cout << "Error. El stock no puede ser 0." << endl;
+
+            limpiarProductos(
+                vCodigoProducto,
+                vNombreProducto,
+                vPrecioVenta,
+                vPrecioCompra,
+                vStock,
+                vCodigoMarcaProducto
+            );
+
+            return;
+        }
+
+        /// Código de marca
+        cout << "Ingrese codigo de marca: ";
+        cin >> vCodigoMarcaProducto[i];
+
+        if(buscarMarca(vCodigoMarca, TAM_MARCAS, vCodigoMarcaProducto[i]) == -1)
+        {
+            cout << "Codigo de marca no encontrado en el lote de marcas." << endl;
+
+            limpiarProductos(
+                vCodigoProducto,
+                vNombreProducto,
+                vPrecioVenta,
+                vPrecioCompra,
+                vStock,
+                vCodigoMarcaProducto
+            );
+
+            return;
+        }
+    }
+
+    cout << endl;
+    cout << "Lote de productos cargado correctamente." << endl;
+}
+
+
+void limpiarProductos(
+    int vCodigoProducto[],
+    string vNombreProducto[],
+    float vPrecioVenta[],
+    float vPrecioCompra[],
+    int vStock[],
+    int vCodigoMarcaProducto[]
+)
+{
+    const int TAM_PRODUCTOS = 20;
+
+    for(int i = 0; i < TAM_PRODUCTOS; i++)
+    {
+        vCodigoProducto[i] = 0;
+        vNombreProducto[i] = "";
+        vPrecioVenta[i] = 0;
+        vPrecioCompra[i] = 0;
+        vStock[i] = 0;
+        vCodigoMarcaProducto[i] = 0;
+    }
+}
+
+
+///lote 3
+int buscarFormaPago(string vCodigoFP[], int cantidad, string codigo)
+{
+    for(int i = 0; i < cantidad; i++)
+    {
+        if(vCodigoFP[i] == codigo)
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+void cargarFormasPago(
+    string vCodigoFP[],
+    string vNombreFP[],
+    int vPorcentajeFP[]
+)
+{
+    const int TAM_FP = 5;
+
+    for(int i = 0; i < TAM_FP; i++)
+    {
+        cout << endl;
+        cout << "Forma de Pago " << i + 1 << endl;
+
+        cout << "Ingrese codigo (EF, MP, TR, TC o CT): ";
+        cin >> vCodigoFP[i];
+
+        while(
+            vCodigoFP[i] != "EF" &&
+            vCodigoFP[i] != "MP" &&
+            vCodigoFP[i] != "TR" &&
+            vCodigoFP[i] != "TC" &&
+            vCodigoFP[i] != "CT"
+        )
+        {
+            cout << "Codigo invalido." << endl;
+            cout << "Ingrese nuevamente: ";
+            cin >> vCodigoFP[i];
+        }
+
+        if(buscarFormaPago(vCodigoFP, i, vCodigoFP[i]) != -1)
+        {
+            cout << "Error, el Codigo esta repetido." << endl;
+            return;
+        }
+
+        cin.ignore();
+
+        cout << "Ingrese nombre de la forma de pago: ";
+        getline(cin, vNombreFP[i]);
+
+        if(vNombreFP[i] == "")
+        {
+            cout << "Error. Debe ingresar un nombre." << endl;
+            return;
+        }
+
+        cout << "Ingrese porcentaje: ";
+        cin >> vPorcentajeFP[i];
+    }
+
+    cout << endl;
+    cout << "formas de pago cargadas:" << endl;
+
+    for(int i = 0; i < TAM_FP; i++)
+    {
+        cout << vCodigoFP[i]
+             << " -- "
+             << vNombreFP[i]
+             << " - "
+             << vPorcentajeFP[i]
+             << endl;
+    }
+
+}
+
 
 
 ------------------------------------------------------------------------------------------
@@ -225,6 +606,7 @@ int pedirCodigoMarca()
 
 Contenidos de "Main.cpp"
 #include <iostream>
+#include <string>
 #include "funciones.h"
 
 using namespace std;
@@ -233,11 +615,48 @@ int main()
 {
     setlocale(LC_ALL, "spanish");
 
+    /// LOTE 1 MARCAS
+    const int TAM_MARCAS = 10;
+
+    int vCodigoMarca[TAM_MARCAS] = {};
+    string vNombreMarca[TAM_MARCAS];
+
+    /// LOTE 2 PRODUCTOS
+    const int TAM_PRODUCTOS = 20;
+
+    int vCodigoProducto[TAM_PRODUCTOS] = {};
+    string vNombreProducto[TAM_PRODUCTOS];
+    float vPrecioVenta[TAM_PRODUCTOS] = {};
+    float vPrecioCompra[TAM_PRODUCTOS] = {};
+    int vStock[TAM_PRODUCTOS] = {};
+    int vCodigoMarcaProducto[TAM_PRODUCTOS] = {};
+
+    /// LOTE 3 FORMAS DE PAGO
+    const int TAM_FP = 5;
+
+    string vCodigoFP[TAM_FP];
+    string vNombreFP[TAM_FP];
+    int vPorcentajeFP[TAM_FP] = {};
+
     mostrarTituloMenu();
-    menuPrincipal();
+
+    menuPrincipal(
+        vCodigoMarca,
+        vNombreMarca,
+        vCodigoProducto,
+        vNombreProducto,
+        vPrecioVenta,
+        vPrecioCompra,
+        vStock,
+        vCodigoMarcaProducto,
+        vCodigoFP,
+        vNombreFP,
+        vPorcentajeFP
+    );
 
     return 0;
 }
+
 
 
 
@@ -250,21 +669,108 @@ Contenidos de "funciones.h"
 #ifndef FUNCIONES_H_INCLUDED
 #define FUNCIONES_H_INCLUDED
 
+#include <string>
+
+using namespace std;
+
 void mostrarTituloMenu();
 
 /// MENÚ PRINCIPAL
-void menuPrincipal();
+void menuPrincipal(
+    int vCodigoMarca[],
+    string vNombreMarca[],
+    int vCodigoProducto[],
+    string vNombreProducto[],
+    float vPrecioVenta[],
+    float vPrecioCompra[],
+    int vStock[],
+    int vCodigoMarcaProducto[],
+    string vCodigoFP[],
+    string vNombreFP[],
+    int vPorcentajeFP[]
+);
+
 void mostrarMenu();
-void ejecutarOpcion(int opcion);
+
+void ejecutarOpcion(
+    int opcion,
+    int vCodigoMarca[],
+    string vNombreMarca[],
+    int vCodigoProducto[],
+    string vNombreProducto[],
+    float vPrecioVenta[],
+    float vPrecioCompra[],
+    int vStock[],
+    int vCodigoMarcaProducto[],
+    string vCodigoFP[],
+    string vNombreFP[],
+    int vPorcentajeFP[]
+);
 
 /// MENÚ REPORTES
 void menuReportes();
 void mostrarMenuReportes();
 void ejecutarOpcion(char opcion);
 
-
-///  Lote 1
+/// LOTE 1
 int pedirCodigoMarca();
-void cargarMarcas();
-int buscarMarca(int vCodigoMarca[], int cantidad, int codigo);
+
+int buscarMarca(
+    int vCodigoMarca[],
+    int cantidad,
+    int codigo
+);
+
+void cargarMarcas(
+    int vCodigoMarca[],
+    string vNombreMarca[]
+);
+///LOTE  2
+
+void cargarProductos(
+    int vCodigoProducto[],
+    string vNombreProducto[],
+    float vPrecioVenta[],
+    float vPrecioCompra[],
+    int vStock[],
+    int vCodigoMarcaProducto[],
+    int vCodigoMarca[],
+    string vNombreMarca[]
+);
+
+int pedirCodigoProducto();
+
+int buscarProducto(
+    int vCodigoProducto[],
+    int cantidad,
+    int codigo
+);
+
+int buscarMarca(
+    int vCodigoMarca[],
+    int cantidad,
+    int codigo
+);
+
+ void limpiarProductos(
+    int vCodigoProducto[],
+    string vNombreProducto[],
+    float vPrecioVenta[],
+    float vPrecioCompra[],
+    int vStock[],
+    int vCodigoMarcaProducto[]
+);
+
+/// LOTE 3
+void cargarFormasPago(
+    string vCodigoFP[],
+    string vNombreFP[],
+    int vPorcentajeFP[]
+);
+
+int buscarFormaPago(
+    string vCodigoFP[],
+    int cantidad,
+    string codigo
+);
 #endif // FUNCIONES_H_INCLUDED
